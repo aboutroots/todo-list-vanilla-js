@@ -1,41 +1,28 @@
+function todoItem(text, completed) {
+    this.todoText= text;
+    this.completed= completed;
+}
+
 var todoList = {
     todos: [],
-
     addTodo: function(todoText){
-        this.todos.push({
-            todoText: todoText,
-            completed: false
-        });
+        this.todos.push(new todoItem(todoText, false));
     },
-
     toggleCompleted: function(position){
         var todo = this.todos[position];
         todo.completed = !todo.completed;
     },
     toggleAll: function(){
-        var allTrue = true;
-        for(let todo of this.todos){
-            if(todo.completed === false){
-                allTrue = false;
-                break;
-            }
-        }
-
-        var completed;
-        if (allTrue === true){
-            completed = false;
-        } else {
-            completed = true;
-        }
-        for(let todo of this.todos){
-            todo.completed = completed;
-        }
+        var allCompleted = this.todos.every(function(todo){
+            return todo.completed;
+        });
+        this.todos.forEach(function(todo){
+            todo.completed = !allCompleted;
+        })
     },
-
     deleteTodo: function(position){
         this.todos.splice(position, 1);
     },
-
     changeTodoText: function(position, newTodoText){
         this.todos[position].todoText = newTodoText;
     }
@@ -46,9 +33,12 @@ var handlers = { // methods in this object are handling different events
         todoList.toggleAll();
         view.displayTodos();
     },
-    toggleTodo: function(){
-        var button = document.createElement('button');
-        button.textContent = 'Toggle Completed'
+    toggleTodo: function(id){
+        todoList.toggleCompleted(id);
+        view.displayTodos();
+    },
+    deleteTodo: function(id){
+        todoList.deleteTodo(id);
         view.displayTodos();
     },
     addTodo: function(){
@@ -60,19 +50,42 @@ var handlers = { // methods in this object are handling different events
     }
 };
 
+
 var view = { // methods in this object are responsible for what user sees, object itself does not contain logic
     displayTodos: function(){
         var todosUl = document.getElementById('todoList');
         todosUl.innerHTML = ''; // clears list before adding all list items
-        for(let todo of todoList.todos){
-            let todoLi = document.createElement('li');
-            let completeSign = '[ ]';
-            if(todo.completed === true) {
-                completeSign = '[x]';
-            }
-            todoLi.textContent = completeSign + ' ' + todo.todoText;
-            todosUl.appendChild(todoLi);
-        }
-    }
 
+        todoList.todos.forEach(function(todo, position){
+            let completeSign = (todo.completed === true) ? '[x]' : '[ ]';
+
+            let todoLi = document.createElement('li');
+            todoLi.textContent = completeSign + ' ' + todo.todoText;
+            todoLi.id = position;
+            todoLi.appendChild(this.createButton('delete'));
+            todoLi.appendChild(this.createButton('toggle'));
+            todosUl.appendChild(todoLi);
+        }, this)
+    },
+    createButton: function(name){
+        var button = document.createElement('button');
+        button.textContent = name;
+        button.className = name + 'Button';
+        return button;
+    },
+    setupEventListener: function(){
+        var todosUl = document.getElementById('todoList');
+        todosUl.addEventListener('click', function(event){
+            var elementClicked = event.target; // the real element that was clicked on
+            //check if element clicked is a proper button
+            if (elementClicked.className === 'deleteButton'){
+                handlers.deleteTodo(parseInt(elementClicked.parentNode.id));
+            }
+            if (elementClicked.className === 'toggleButton'){
+                handlers.toggleTodo(parseInt(elementClicked.parentNode.id));
+            }
+        })
+    }
 };
+
+view.setupEventListener()
