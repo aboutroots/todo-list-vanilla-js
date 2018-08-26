@@ -44,6 +44,7 @@ var handlers = { // methods in this object are handling different events
     addTodo: function(){
         var text_elem = document.getElementById('addTodoTextInput');
         var text = text_elem.value
+        if (text === '') return;
         text_elem.value = ''; // clear input form
         todoList.addTodo(text);
         view.displayTodos();
@@ -57,31 +58,38 @@ var view = { // methods in this object are responsible for what user sees, objec
         todosUl.innerHTML = ''; // clears list before adding all list items
 
         todoList.todos.forEach(function(todo, position){
-            let completeSign = (todo.completed === true) ? '[x]' : '[ ]';
-
             let todoLi = document.createElement('li');
-            todoLi.textContent = completeSign + ' ' + todo.todoText;
+            let textParagraph = document.createElement('p');
+
+            textParagraph.textContent = todo.todoText;
             todoLi.id = position;
-            todoLi.appendChild(this.createButton('delete'));
-            todoLi.appendChild(this.createButton('toggle'));
+            todoLi.appendChild(this.createToggleButton(todo.completed));
+            todoLi.appendChild(this.createDeleteButton());
+            todoLi.appendChild(textParagraph);
+
             todosUl.appendChild(todoLi);
         }, this)
     },
-    createButton: function(name){
-        var button = document.createElement('button');
-        button.textContent = name;
-        button.className = name + 'Button';
-        return button;
+    createDeleteButton: function(){
+        var icon = document.createElement('i');
+        icon.className = "far fa-trash-alt deleteButton";
+        return icon;
+    },
+    createToggleButton: function(toggled){
+        var icon = document.createElement('i');
+        var sign = toggled === true ? "check-circle" : "circle";
+        icon.className = "far fa-" + sign + " toggleButton";
+        return icon;
     },
     setupEventListener: function(){
         var todosUl = document.getElementById('todoList');
         todosUl.addEventListener('click', function(event){
             var elementClicked = event.target; // the real element that was clicked on
             //check if element clicked is a proper button
-            if (elementClicked.className === 'deleteButton'){
+            if (elementClicked.className.includes('deleteButton')){
                 handlers.deleteTodo(parseInt(elementClicked.parentNode.id));
             }
-            if (elementClicked.className === 'toggleButton'){
+            if (elementClicked.className.includes('toggleButton')){
                 handlers.toggleTodo(parseInt(elementClicked.parentNode.id));
             }
         })
