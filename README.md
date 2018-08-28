@@ -1,6 +1,6 @@
 <h1 align="center">
-  <img src="https://github.com/aboutroots/todo-list-vanill-js/blob/master/static/img/demo.gif" alt="logo" style="text-align: center;" align="center"></br>
-    TODO List made in vanilla JS
+  <img src="https://github.com/aboutroots/todo-list-vanilla-js/blob/master/img/demo.gif" style="text-align: center;" align="center">
+   
 </h1>
 
 > This is a demo project.
