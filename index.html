@@ -8,15 +8,23 @@
     </head>
     <body>
         <div id='content'>
-            <h1>A simple todo list.</h1>
-            <h2>Created in pure vanilla JS.  
-                <a href='https://github.com/aboutroots/'>@aboutroots</a>
-            </h2>
-            <span id='mainPanel'>
-                <button onclick="handlers.toggleAll()">Toggle All <i class="fas fa-check-double"></i></button>
-                <input id="addTodoTextInput" type="text"></input>
-                <button onclick="handlers.addTodo()">Add</button>
-            </span>
+            <div id="navigation">
+                <h1>A simple todo list.</h1>
+                <h2>Created in pure vanilla JS.  
+                    <a href='https://github.com/aboutroots/'>@aboutroots</a>
+                </h2>
+                <span id='mainPanel'>
+                    <div class='bigButton' onclick="handlers.toggleAll()">
+                        <span class="buttonText">Toggle All</span>
+                        <span class="fas fa-check-double"></span>
+                    </div>
+                    <input id="addTodoTextInput" type="text" class='bouncy'></input>
+                    <div class='bigButton' onclick="handlers.addTodo()">
+                        <span class="buttonText">Add</span>
+                        <span class="fas fa-plus"></span>
+                    </div>
+                </span>
+            </div>
             <ul id='todoList'>
             <ul>
         </div>

@@ -1,71 +1,63 @@
 :root {
     --main-bg: #201C51;
+    --lighter-bg: #54517f;
     --main-fg: #C9C7E0;
-    --whitest: #ccc;
+    --lightgray: #ccc;
+    --darkgray: #555;
+    --whitest: #fff;
     --accent: #00B9FF;
     --accent2: #FC615F;
     --opposite: #BC2849;
 }
 body {
     color: var(--main-fg);
-    background-color: var(--main-bg);
     font-family: 'Source Sans Pro', Helvetica, sans-serif;
     font: normal 1.5em 'Source Sans Pro';
     margin: auto;
+    background: var(--main-bg) url("img/bg-fade.png") no-repeat center top;
+    background-attachment: fixed;
+    background-size: cover;
 }
-body::after {
-background-image: url("img/bg.jpg");
-background-repeat: no-repeat;
-background-attachment: fixed;
-background-position: center top;
-background-size: cover;
-  content: "";
-  opacity: 0.5;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  position: absolute;
-  z-index: -1;
+
+#content {
+    margin: auto;
+    max-width: 60%;
+    margin-top: 20%;
 }
 
 a, a:visited{
     color: var(--accent2);
 }
 a:hover, a:active {
-    color: #fff; 
+    color: var(--whitest);
 }
 
-button {
+
+button, .bigButton {
     outline: none;
     border-radius: 2px;
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     background: none;
-    border: 1px solid var(--whitest);
-    padding: 1%;
-    margin-right: 10px;
-    color: var(--whitest);
+    border: 1px solid var(--lightgray);
+    padding: 0.25em;
+    color: var(--lightgray);
     font: 95% 'Source Sans Pro', Helvetica, sans-serif;
+    min-width: 5%;
+    transition: all 0.15s;
 }
 
-button:hover {
+button:hover, .bigButton:hover {
     background: var(--accent2);
-    color: white;
+    color: var(--whitest);
     border-color: var(--accent2);
     cursor: pointer;
 }
 
-#content {
-    margin: auto;
-    max-width: 60%;
-}
 
 h1 {
-    margin-top: 20%;
-    color: #fff;
-    font: bold;
+    color: var(--whitest);
     text-align: center;
 }
 
@@ -74,41 +66,49 @@ h2 {
     text-align: center;
     font-size: 1em;
 }
+
 h2 a{
     padding-left: 10px;
 }
 
 #mainPanel {
     display: flex;
-    padding: 1em;
+    margin: 1.5em, 0, 1em, 0;
     text-align: center;
-    margin: auto;
-    width: 100%;
 }
 
 #mainPanel input {
-    display: inline-block;
     flex: 2;
     outline: none;
     border-radius: 2px;
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
-    background: #fff;
-    border: 1px solid #ccc;
-    padding: 1%;
-    margin: 1px;
-    margin-right: 10px;
-    color: #555;
+    background: var(--whitest);
+    border: 1px solid var(--lightgray);
+    padding: 0.5em;
+    margin: 1px 10px 1px 10px;
+    color: var(--darkgray);
     font: 95% 'Source Sans Pro', Helvetica, sans-serif;
+    height: 2em;
+    max-width: 70%;
+    animation-delay:0.07s;
 }
+
 #mainPanel input:focus
 {
     box-shadow: 0 0 7px var(--accent);
 }
-#mainPanel button {
-    min-width: 10%;
+
+.bigButton {
+    min-width: 15%;
+    height: 2em;
     display: inline;
+    vertical-align: middle;
+    padding-top: 0.2em;
+}
+.bigButton .fas {
+    padding-top: 0.25em;
 }
 
 ul {
@@ -118,21 +118,26 @@ ul {
 }
 
 li {
-    margin: 1em;
+    margin: 1em, 0, 1em, 0;
     padding-bottom: 0;
     display: flex;
     padding-top: 10px;
-    border-top: 1px dashed #54517f;
+    border-top: 1px dashed var(--lighter-bg);
+    cursor: default;
+}
+
+li p:hover {
+    color: var(--whitest);
 }
 
 li p {
     display: inline;
     flex: 2;
-    padding: 2%;
-    padding-left: 9%;
+    padding: 2% 2% 2% 9%;
     margin: 0;
     vertical-align: middle;
 }
+
 li i {
     font-size: 1.5em;
     padding: 1%;
@@ -140,6 +145,7 @@ li i {
     vertical-align: middle;
     padding-right: 5px;
     cursor: pointer;
+    transition: all 0.15s;
 }
  li i:hover {
     opacity: 1;
@@ -150,4 +156,25 @@ li i {
     opacity: 0.7;
 }
 
+.bouncy:hover, .bouncy:focus{
+    animation:bouncy 5s infinite linear;
+    position:relative;
+}
+@keyframes bouncy {
+    0%{top:0em}
+    40%{top:0em}
+    43%{top:-0.3em}
+    46%{top:0em}
+    48%{top:-0.1em}
+    50%{top:0em}
+    100%{top:0em;}
+}
 
+@media (max-width: 960px) {
+    .content {
+        max-width: 80%;
+    }
+    .bigButton .buttonText {
+        display: none;
+    }
+}

@@ -6,7 +6,7 @@ function todoItem(text, completed) {
 var todoList = {
     todos: [],
     addTodo: function(todoText){
-        this.todos.push(new todoItem(todoText, false));
+        this.todos.splice(0, 0, new todoItem(todoText, false));
     },
     toggleCompleted: function(position){
         var todo = this.todos[position];
@@ -81,7 +81,7 @@ var view = { // methods in this object are responsible for what user sees, objec
         icon.className = "far fa-" + sign + " toggleButton";
         return icon;
     },
-    setupEventListener: function(){
+    setupButtonClickEventListener: function(){
         var todosUl = document.getElementById('todoList');
         todosUl.addEventListener('click', function(event){
             var elementClicked = event.target; // the real element that was clicked on
@@ -93,7 +93,21 @@ var view = { // methods in this object are responsible for what user sees, objec
                 handlers.toggleTodo(parseInt(elementClicked.parentNode.id));
             }
         })
+    },
+    setupInputEventListener: function(){
+        var input = document.getElementById('addTodoTextInput');
+        input.addEventListener('keyup', function(event){
+            if (event.keyCode === 13) {
+                handlers.addTodo();
+            }
+        })
+    },
+    setupAutofocus: function(){
+        var input = document.getElementById('addTodoTextInput');
+        input.autofocus = true;
     }
 };
 
-view.setupEventListener()
+view.setupButtonClickEventListener();
+view.setupInputEventListener();
+view.setupAutofocus();
