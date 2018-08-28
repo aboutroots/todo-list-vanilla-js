@@ -1,49 +1,49 @@
 function todoItem(text, completed) {
-    this.todoText= text;
-    this.completed= completed;
+    this.todoText = text;
+    this.completed = completed;
 }
 
 var todoList = {
     todos: [],
-    addTodo: function(todoText){
+    addTodo: function (todoText) {
         this.todos.splice(0, 0, new todoItem(todoText, false));
     },
-    toggleCompleted: function(position){
+    toggleCompleted: function (position) {
         var todo = this.todos[position];
         todo.completed = !todo.completed;
     },
-    toggleAll: function(){
-        var allCompleted = this.todos.every(function(todo){
+    toggleAll: function () {
+        var allCompleted = this.todos.every(function (todo) {
             return todo.completed;
         });
-        this.todos.forEach(function(todo){
+        this.todos.forEach(function (todo) {
             todo.completed = !allCompleted;
-        })
+        });
     },
-    deleteTodo: function(position){
+    deleteTodo: function (position) {
         this.todos.splice(position, 1);
     },
-    changeTodoText: function(position, newTodoText){
+    changeTodoText: function (position, newTodoText) {
         this.todos[position].todoText = newTodoText;
     }
 };
 
 var handlers = { // methods in this object are handling different events
-    toggleAll: function(){
+    toggleAll: function () {
         todoList.toggleAll();
         view.displayTodos();
     },
-    toggleTodo: function(id){
+    toggleTodo: function (id) {
         todoList.toggleCompleted(id);
         view.displayTodos();
     },
-    deleteTodo: function(id){
+    deleteTodo: function (id) {
         todoList.deleteTodo(id);
         view.displayTodos();
     },
-    addTodo: function(){
+    addTodo: function () {
         var text_elem = document.getElementById('addTodoTextInput');
-        var text = text_elem.value
+        var text = text_elem.value;
         if (text === '') return;
         text_elem.value = ''; // clear input form
         todoList.addTodo(text);
@@ -53,11 +53,11 @@ var handlers = { // methods in this object are handling different events
 
 
 var view = { // methods in this object are responsible for what user sees, object itself does not contain logic
-    displayTodos: function(){
+    displayTodos: function () {
         var todosUl = document.getElementById('todoList');
         todosUl.innerHTML = ''; // clears list before adding all list items
 
-        todoList.todos.forEach(function(todo, position){
+        todoList.todos.forEach(function (todo, position) {
             let todoLi = document.createElement('li');
             let textParagraph = document.createElement('p');
 
@@ -68,41 +68,42 @@ var view = { // methods in this object are responsible for what user sees, objec
             todoLi.appendChild(textParagraph);
 
             todosUl.appendChild(todoLi);
-        }, this)
+        }, this);
     },
-    createDeleteButton: function(){
+    createDeleteButton: function () {
         var icon = document.createElement('i');
         icon.className = "far fa-trash-alt deleteButton";
         return icon;
     },
-    createToggleButton: function(toggled){
+    createToggleButton: function (toggled) {
         var icon = document.createElement('i');
         var sign = toggled === true ? "check-circle" : "circle";
         icon.className = "far fa-" + sign + " toggleButton";
         return icon;
     },
-    setupButtonClickEventListener: function(){
+    setupButtonClickEventListener: function () {
         var todosUl = document.getElementById('todoList');
-        todosUl.addEventListener('click', function(event){
+        todosUl.addEventListener('click', function (event) {
             var elementClicked = event.target; // the real element that was clicked on
+            var todoID = parseInt(elementClicked.parentNode.id)
             //check if element clicked is a proper button
-            if (elementClicked.className.includes('deleteButton')){
-                handlers.deleteTodo(parseInt(elementClicked.parentNode.id));
+            if (elementClicked.className.includes('deleteButton')) {
+                handlers.deleteTodo(todoID);
             }
-            if (elementClicked.className.includes('toggleButton')){
-                handlers.toggleTodo(parseInt(elementClicked.parentNode.id));
+            if (elementClicked.className.includes('toggleButton')) {
+                handlers.toggleTodo(todoID);
             }
-        })
+        });
     },
-    setupInputEventListener: function(){
+    setupInputEventListener: function () {
         var input = document.getElementById('addTodoTextInput');
-        input.addEventListener('keyup', function(event){
+        input.addEventListener('keyup', function (event) {
             if (event.keyCode === 13) {
                 handlers.addTodo();
             }
-        })
+        });
     },
-    setupAutofocus: function(){
+    setupAutofocus: function () {
         var input = document.getElementById('addTodoTextInput');
         input.autofocus = true;
     }
